@@ -1,31 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Specialist } from "../../specialists/entities/specialist.entity";
 
 @Entity()
 export class Organization {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 30 })
   name: string;
 
-  @Column({ type: "varchar", length: 100 })
-  country: string;
-
-  @Column({ type: "varchar", length: 100 })
-  city: string;
-
-  @Column({ type: "varchar", length: 100 })
-  address: string;
-
-  @Column({ type: "varchar", length: 100 })
-  email: string;
-
-  @Column({ type: "varchar", length: 100 })
-  phone: string;
-
-  // @OneToMany(() => Specialist, (specialist) => specialist.organization)
-  // specialists: Specialist[];
+  @OneToMany(() => Specialist, (specialist) => specialist.organization)
+  specialists: Specialist[];
 
   @CreateDateColumn({
     type: "timestamp",
