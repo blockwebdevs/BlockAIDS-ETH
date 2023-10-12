@@ -1,10 +1,10 @@
 import React, {FC} from "react";
-import {TasksList} from "../modules/tasks";
+import {TasksList, TasksFilter, TasksCalendar} from "../modules/tasks";
 
 const Home: FC = () => {
   return (
     <>
-      <TasksList/>
+      <TasksList Filter={TasksFilter} Calendar={TasksCalendar}/>
     </>
   );
 };

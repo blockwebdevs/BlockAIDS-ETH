@@ -27,17 +27,9 @@ body {
   display: none !important;
 }
 
-.notifications-bar {
-  text-align: center;
-  width: 100%;
-  background-color: $blue4;
-  color: #FFF;
-  padding: 10px 20px;
-}
-
 .wrapper {
   max-width: 1920px;
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   padding: 0 15px;
 
@@ -85,18 +77,9 @@ body {
   }
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-background-clip: inherit;
-  transition: background-color 5000s ease-in-out 0s;
-  box-shadow: inset 0 0 20px 20px $blue1;
-}
-
 .standard-select {
   width: 100%;
-  border-radius: 8px 0 0 8px !important;
+  border-radius: 8px;
   border: 1px solid $blue2;
   background-color: $blue1;
   padding-left: 32px;
@@ -110,14 +93,6 @@ input:-webkit-autofill:active {
     font-size: 16px;
     font-family: 'Satoshi-Light', serif;
   }
-}
-
-.MuiInputBase-input {
-  display: flex !important;
-}
-
-.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-  border-color: transparent !important;
 }
 
 .standard-date-picker {
@@ -366,85 +341,4 @@ input:-webkit-autofill:active {
 .span-link {
   color: $black3;
   cursor: pointer;
-}
-
-.alert-area {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 999;
-
-  .box {
-    --Size: 40px;
-    display: inherit;
-    align-items: inherit;
-    justify-content: inherit;
-    width: var(--Size);
-    height: var(--Size);
-    background: $blue3;
-    border-radius: 50%;
-    animation: 1s showAlert linear infinite;
-    animation-delay: 0.1s;
-  }
-
-  .box > * {
-    opacity: 0;
-    animation: 1s tick linear infinite;
-    animation-delay: 0.1s;
-  }
-
-  @keyframes showAlert {
-    20% {
-      border-radius: 100%;
-      transform: scale(.4);
-      box-shadow: 0 0 0 0 rgba(#77F6D5, .2);
-    }
-
-    40% {
-      transform: scale(1.2);
-    }
-
-    50% {
-      transform: scale(1);
-      box-shadow: 0 0 0 40px rgba(#77F6D5, .2);
-    }
-
-    70% {
-      border-radius: 100%;
-      box-shadow: 0 0 0 90px rgba(#77F6D5, 0);
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-    }
-  }
-
-  @keyframes tick {
-    0%,
-    25% {
-      opacity: 0;
-    }
-
-    50%,
-    100% {
-      opacity: 1;
-    }
-  }
-}
-
-.error-area {
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 10px;
-  color: $red4;
-  font-size: 15px;
-  font-family: Satoshi-Medium, serif;
-  background-color: rgba(246, 44, 48, 0.3);
 }
