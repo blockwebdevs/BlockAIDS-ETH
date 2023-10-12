@@ -20,7 +20,7 @@ import { UpdateOrganizationDto } from "./dto/update-organization.dto";
 import { ValidationOrganizationsService } from "./services/validation-organizations.service";
 
 @ApiTags("Organizations")
-@Controller("api/organizations")
+@Controller("organizations")
 export class OrganizationsController {
   constructor(
     private readonly crudOrganizationService: CrudOrganizationsService,
