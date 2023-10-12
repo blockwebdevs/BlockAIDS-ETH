@@ -1,7 +1,6 @@
 import React, {FC} from "react";
 import {Breadcrumbs, IBreadcrumb} from "../modules/breadcrumbs";
-import {TasksCalendar, TasksFilter, TasksList} from "../modules/tasks";
-import {TasksList} from "../modules/tasks";
+import {NotificationsWidget} from "../modules/notofications";
 
 const breadcrumbs: IBreadcrumb[] = [
   {
@@ -10,19 +9,18 @@ const breadcrumbs: IBreadcrumb[] = [
     active: false,
   },
   {
-    name: 'Tasks',
-    link: '/tasks',
+    name: 'Notifications',
+    link: '/notifications',
     active: true,
   },
 ];
-const Tasks: FC = () => {
+const Notifications: FC = () => {
   return (
     <div>
       <Breadcrumbs breadcrumbs={breadcrumbs}/>
-      <TasksList Filter={TasksFilter} Calendar={TasksCalendar}/>
-      <TasksList/>
+      <NotificationsWidget/>
     </div>
   );
 }
 
-export default Tasks;
+export default Notifications;
