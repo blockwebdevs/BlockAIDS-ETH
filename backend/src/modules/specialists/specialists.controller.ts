@@ -41,6 +41,14 @@ export class SpecialistsController {
     return SpecialistsResource.collect(specialists);
   }
 
+  @ApiResponse({ status: 200, type: SpecialistsResource })
+  @ApiOperation({ summary: "Get specialist by id" })
+  @Get(":id")
+  async findOne(@Param("id") id: string) {
+    const specialist = await this.crudSpecialistsService.findOne(+id);
+    return new SpecialistsResource(specialist);
+  }
+
   @ApiResponse({ status: 200, type: [SpecialistsResource] })
   @ApiOperation({ summary: "Get specialists by organization id" })
   @Get("/organization/:id")
@@ -48,14 +56,6 @@ export class SpecialistsController {
     const specialists =
       await this.crudSpecialistsService.findByOrganizationId(id);
     return SpecialistsResource.collect(specialists);
-  }
-
-  @ApiResponse({ status: 200, type: SpecialistsResource })
-  @ApiOperation({ summary: "Get specialist by id" })
-  @Get(":id")
-  async findOne(@Param("id") id: string) {
-    const specialist = await this.crudSpecialistsService.findOne(+id);
-    return new SpecialistsResource(specialist);
   }
 
   @ApiConsumes("multipart/form-data")
