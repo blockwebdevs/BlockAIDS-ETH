@@ -25,7 +25,7 @@ import { UsersResource } from "./resources/users.resource";
 import { ValidationUsersService } from "./services/validation-users.service";
 
 @ApiTags("Users")
-@Controller("users")
+@Controller("api/users")
 export class UsersController {
   constructor(
     private readonly crudUsersService: CrudUsersService,
@@ -52,17 +52,6 @@ export class UsersController {
   @ApiConsumes("multipart/form-data")
   @UseInterceptors(FileInterceptor("avatar"))
   @ApiResponse({ status: 200, type: UsersResource })
-  @ApiOperation({ summary: "Create user" })
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto, @UploadedFile() avatar) {
-    await this.validationUsersService.validateEmail(createUserDto.email);
-    const user = await this.crudUsersService.createUser(createUserDto, avatar);
-    return new UsersResource(user);
-  }
-
-  @ApiConsumes("multipart/form-data")
-  @UseInterceptors(FileInterceptor("avatar"))
-  @ApiResponse({ status: 200, type: UsersResource })
   @ApiOperation({ summary: "Update user" })
   @Patch(":id")
   async update(
@@ -73,6 +62,17 @@ export class UsersController {
     await this.validationUsersService.validateEmail(updateUserDto.email, +id);
     await this.crudUsersService.updateUser(+id, updateUserDto, avatar);
     const user = await this.crudUsersService.findUser(+id);
+    return new UsersResource(user);
+  }
+
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(FileInterceptor("avatar"))
+  @ApiResponse({ status: 200, type: UsersResource })
+  @ApiOperation({ summary: "Create user" })
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto, @UploadedFile() avatar) {
+    await this.validationUsersService.validateEmail(createUserDto.email);
+    const user = await this.crudUsersService.createUser(createUserDto, avatar);
     return new UsersResource(user);
   }
 

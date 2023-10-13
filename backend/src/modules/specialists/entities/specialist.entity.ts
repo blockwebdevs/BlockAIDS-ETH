@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Organization } from "../../organizations/entities/organization.entity";
+import {Task} from "../../tasks/entities/task.entity";
 
 @Entity()
 export class Specialist {
@@ -16,7 +17,7 @@ export class Specialist {
   @Column({ type: "varchar", length: 30 })
   name: string;
 
-  @Column({ type: "varchar", length: 100 })
+  @Column({ type: "varchar", length: 100, nullable: true })
   job_position: string;
 
   @Column({ type: "varchar", length: 40 })
@@ -40,4 +41,11 @@ export class Specialist {
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   public updated_at: Date;
+
+  // @ManyToOne(() => Task)
+  // task: Task[];
+  //
+  // @ManyToOne(() => Task, (task) => taks.specialist)
+  // @JoinColumn({ name: 'owner_id', referencedColumnName: 'id' })
+  // owner!: PetOwner
 }

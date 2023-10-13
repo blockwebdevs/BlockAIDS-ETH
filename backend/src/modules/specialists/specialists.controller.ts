@@ -25,7 +25,7 @@ import { UpdateSpecialistDto } from "./dto/update-specialist.dto";
 import { SpecialistsResource } from "./resources/specialists.resource";
 
 @ApiTags("Specialists")
-@Controller("specialists")
+@Controller("api/specialists")
 export class SpecialistsController {
   constructor(
     private readonly crudSpecialistsService: CrudSpecialistsService,
@@ -37,25 +37,25 @@ export class SpecialistsController {
   @ApiOperation({ summary: "Get all specialists" })
   @Get()
   async findAll() {
-    const Specialists = await this.crudSpecialistsService.findAll();
-    return SpecialistsResource.collect(Specialists);
-  }
-
-  @ApiResponse({ status: 200, type: [SpecialistsResource] })
-  @ApiOperation({ summary: "Get specialists by organization id" })
-  @Get("/organization/:id")
-  async findByOrganizationId(@Param("id") id: string) {
-    const Specialists =
-      await this.crudSpecialistsService.findByOrganizationId(id);
-    return SpecialistsResource.collect(Specialists);
+    const specialists = await this.crudSpecialistsService.findAll();
+    return SpecialistsResource.collect(specialists);
   }
 
   @ApiResponse({ status: 200, type: SpecialistsResource })
   @ApiOperation({ summary: "Get specialist by id" })
   @Get(":id")
   async findOne(@Param("id") id: string) {
-    const user = await this.crudSpecialistsService.findOne(+id);
-    return new SpecialistsResource(user);
+    const specialist = await this.crudSpecialistsService.findOne(+id);
+    return new SpecialistsResource(specialist);
+  }
+
+  @ApiResponse({ status: 200, type: [SpecialistsResource] })
+  @ApiOperation({ summary: "Get specialists by organization id" })
+  @Get("/organization/:id")
+  async findByOrganizationId(@Param("id") id: string) {
+    const specialists =
+      await this.crudSpecialistsService.findByOrganizationId(id);
+    return SpecialistsResource.collect(specialists);
   }
 
   @ApiConsumes("multipart/form-data")

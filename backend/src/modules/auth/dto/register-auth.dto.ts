@@ -1,10 +1,10 @@
 import {
   IsEmail,
   IsEnum,
-  IsNotEmpty, IsNumber,
+  IsNotEmpty,
   IsString,
   Matches,
-  MinLength, ValidateIf,
+  MinLength,
 } from "class-validator";
 
 import { ApiProperty } from "@nestjs/swagger";
@@ -28,7 +28,7 @@ export class RegisterAuthDto {
   @ApiProperty({ example: "qwerQWER1234%$" })
   @IsNotEmpty()
   @Matches(passwordRegEx, {
-    message: `Password must contain minimum 8 and maximum 20 characters, 
+    message: `Password must contain Minimum 8 and maximum 20 characters, 
     at least one uppercase letter, 
     one lowercase letter, 
     one number and 
@@ -40,9 +40,4 @@ export class RegisterAuthDto {
   @IsString()
   @IsEnum([...Object.values(AuthTypeEnum)])
   type: string;
-
-  @ApiProperty({ example: 1 })
-  @IsString()
-  @ValidateIf((o) => "organizationId" in o)
-  organizationId: string;
 }
