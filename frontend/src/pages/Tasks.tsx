@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Breadcrumbs, IBreadcrumb} from "../modules/breadcrumbs";
-import {TasksCalendar, TasksFilter, TasksList} from "../modules/tasks";
+import {TasksList} from "../modules/tasks";
 
 const breadcrumbs: IBreadcrumb[] = [
   {
@@ -18,7 +18,7 @@ const Tasks: FC = () => {
   return (
     <div>
       <Breadcrumbs breadcrumbs={breadcrumbs}/>
-      <TasksList Filter={TasksFilter} Calendar={TasksCalendar}/>
+      <TasksList/>
     </div>
   );
 }
