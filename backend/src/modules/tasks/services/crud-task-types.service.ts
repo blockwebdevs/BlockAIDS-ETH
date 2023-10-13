@@ -10,8 +10,7 @@ export class CrudTaskTypesService {
   constructor(
     @InjectRepository(TaskType)
     private readonly taskTypeRepository: Repository<TaskType>,
-  ) {
-  }
+  ) {}
 
   async create(createTaskTypeDto: CreateTaskTypeDto): Promise<TaskType> {
     try {
@@ -22,11 +21,7 @@ export class CrudTaskTypesService {
   }
 
   findAll(): Promise<TaskType[]> {
-    return this.taskTypeRepository.find({
-      order: {
-        id: "DESC",
-      },
-    });
+    return this.taskTypeRepository.find();
   }
 
   async findOne(id: number): Promise<TaskType> {

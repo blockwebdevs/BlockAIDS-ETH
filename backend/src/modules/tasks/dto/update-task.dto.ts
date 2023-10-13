@@ -36,6 +36,12 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @IsNotEmpty()
   organizationId: string;
 
+  @ApiProperty({ example: '1' })
+  @ValidateIf((o) => "notificationId" in o)
+  @IsString()
+  @IsNotEmpty()
+  notificationId: string;
+
   @ApiProperty({ example: "My first task" })
   @ValidateIf((o) => "name" in o)
   @IsString()
@@ -46,7 +52,7 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @ApiProperty({ example: "1990-07-10", required: false })
   @ValidateIf((o) => "dateDue" in o)
   @IsDateString()
-  due_date: Date | null;
+  dateDue: Date | null;
 
   @ApiProperty({ example: TaskStatusEnum.InProgress, required: false })
   @ValidateIf((o) => "status" in o)
@@ -59,12 +65,6 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @IsNumber()
   @IsNotEmpty()
   points: number;
-
-  @ApiProperty({ example: "33mhhyFW4KHXjbL1KrbPEBPb43QiXdBndzbeMJafGiiwgR4v3y6d6vM4TkMw7aLtoTLz4jez37Qs1PeyeRynWpaX" })
-  @ValidateIf((o) => "pay_signature" in o)
-  @IsString()
-  @IsNotEmpty()
-  pay_signature: string;
 
   @ApiProperty({ example: "Task description...." })
   @ValidateIf((o) => "description" in o)

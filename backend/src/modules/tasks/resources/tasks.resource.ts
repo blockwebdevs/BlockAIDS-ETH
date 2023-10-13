@@ -5,6 +5,7 @@ import { TaskStatusEnum } from "../enums/task-status.enum";
 import { UsersResource } from "../../users/resources/users.resource";
 import { SpecialistsResource } from "../../specialists/resources/specialists.resource";
 import { TaskTypeResource } from "./task-type.resource";
+import { NotificationsResource } from "../../notifications/resources/notifications.resource";
 
 @Injectable()
 export class TasksResource {
@@ -13,13 +14,11 @@ export class TasksResource {
   @ApiProperty({ example: "My first task" })
   public name: string;
   @ApiProperty({ example: "2023-07-10" })
-  public dateDue: string;
+  public dateDue: Date;
   @ApiProperty({ example: TaskStatusEnum.InProgress })
   public status: TaskStatusEnum;
   @ApiProperty({ example: 342 })
   public points: number;
-  @ApiProperty({ example: "33mhhyFW4KHXjbL1KrbPEBPb43QiXdBndzbeMJafGiiwgR4v3y6d6vM4TkMw7aLtoTLz4jez37Qs1PeyeRynWpaX" })
-  public pay_signature: string;
   @ApiProperty({ example: "My first task description" })
   public description: string;
   @ApiProperty({ example: UsersResource })
@@ -28,6 +27,8 @@ export class TasksResource {
   public specialist: SpecialistsResource;
   @ApiProperty({ example: TaskTypeResource })
   public taskType: TaskTypeResource;
+  @ApiProperty({ example: NotificationsResource })
+  public notification: NotificationsResource;
   @ApiProperty({ example: OrganizationResource })
   public organization: OrganizationResource;
   @ApiProperty({ example: 2 })
@@ -36,16 +37,18 @@ export class TasksResource {
   public constructor(task) {
     this.id = task.id;
     this.name = task.name;
-    this.dateDue = task.due_date;
+    this.dateDue = task.dateDue;
     this.status = task.status;
     this.points = task.points;
-    this.pay_signature = task.pay_signature;
     this.description = task.description;
     this.user = task.user ? new UsersResource(task.user) : null;
     this.specialist = task.specialist
       ? new SpecialistsResource(task.specialist)
       : null;
     this.taskType = task.taskType ? new TaskTypeResource(task.taskType) : null;
+    this.notification = task.notification
+      ? new NotificationsResource(task.notification)
+      : null;
     this.organization = task.organization
       ? new OrganizationResource(task.organization)
       : null;
