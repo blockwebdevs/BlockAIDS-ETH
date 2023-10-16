@@ -36,12 +36,6 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @IsNotEmpty()
   organizationId: string;
 
-  @ApiProperty({ example: '1' })
-  @ValidateIf((o) => "notificationId" in o)
-  @IsString()
-  @IsNotEmpty()
-  notificationId: string;
-
   @ApiProperty({ example: "My first task" })
   @ValidateIf((o) => "name" in o)
   @IsString()
@@ -52,7 +46,7 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @ApiProperty({ example: "1990-07-10", required: false })
   @ValidateIf((o) => "dateDue" in o)
   @IsDateString()
-  dateDue: Date | null;
+  due_date: Date | null;
 
   @ApiProperty({ example: TaskStatusEnum.InProgress, required: false })
   @ValidateIf((o) => "status" in o)

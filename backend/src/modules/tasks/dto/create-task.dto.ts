@@ -29,11 +29,6 @@ export class CreateTaskDto {
   @IsNotEmpty()
   organizationId: string;
 
-  @ApiProperty({ example: '1' })
-  @IsString()
-  @IsNotEmpty()
-  notificationId: string;
-
   @ApiProperty({ example: "My first task" })
   @IsString()
   @MinLength(2, { message: "Name must have at least 2 characters." })
@@ -42,7 +37,7 @@ export class CreateTaskDto {
 
   @ApiProperty({ example: "1990-07-10", required: false })
   @IsDateString()
-  dateDue: Date | null;
+  due_date: Date | null;
 
   @ApiProperty({ example: TaskStatusEnum.InProgress, required: false })
   @IsString()
