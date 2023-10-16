@@ -4,9 +4,8 @@ export interface ITaskCreator {
   specialistId: string,
   taskTypeId: string,
   organizationId: string,
-  notificationId: string,
   name: string,
-  dateDue?: string,
+  due_date?: string | null,
   status: string,
   points: number,
   description: string

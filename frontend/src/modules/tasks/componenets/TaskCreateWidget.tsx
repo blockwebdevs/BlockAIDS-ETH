@@ -13,27 +13,34 @@ import {organizationsApi} from "../../../api/organizationsApi";
 import {specialistsApi} from "../../../api/specialistsApi";
 import {useAppSelector} from "../../../hooks/redux";
 import {tasksApi} from "../../../api/tasksApi";
+import {usersApi} from "../../../api/usersApi";
+import {notificationsApi} from "../../../api/notificationsApi";
 import MyInput from "../../../ui/MyInput";
 import {isErrorWithMessage, isFetchBaseQueryError} from "../../../helpers/errors";
 import DoneAlert from "../../../components/DoneAlert";
+import {NotificationStatusEnum} from "../../notofications/enums/NotificationStatusEnum";
+import {ITask} from "../../../models/ITask";
 
 const TaskCreateWidget: FC = () => {
   const {type, authUser} = useAppSelector(state => state.authReducer);
   const [createTask] = tasksApi.useCreateTaskMutation();
+  const [createNotification] = notificationsApi.useCreateNotificationMutation();
 
   const [taskTypesOptions, setTaskTypesOptions] = React.useState<ISelectOptions[]>([]);
   const [organizationsOptions, setOrganizationsOptions] = React.useState<ISelectOptions[]>([]);
   const [specialistsOptions, setSpecialistsOptions] = React.useState<ISelectOptions[]>([]);
+  const [usersOptions, setUsersOptions] = React.useState<ISelectOptions[]>([]);
 
   const {data: taskTypes} = taskTypesApi.useFetchAllTaskTypesQuery();
   const {data: organizations} = organizationsApi.useFetchAllOrganizationsQuery();
   const {data: specialists} = specialistsApi.useFetchAllSpecialistsQuery();
-
+  const {data: users} = usersApi.useFetchAllUsersQuery();
 
   const [name, setName] = React.useState('');
   const [taskType, setTaskType] = React.useState('');
   const [organization, setOrganization] = React.useState('');
   const [specialist, setSpecialist] = React.useState('');
+  const [user, setUser] = React.useState('');
   const [dateDue, setDateDue] = React.useState<Date | null | undefined>(null);
   const [description, setDescription] = React.useState('');
   const [error, setError] = React.useState('');
@@ -58,10 +65,22 @@ const TaskCreateWidget: FC = () => {
   useEffect(() => {
     if (!specialists) return;
     setSpecialistsOptions(specialists.map(specialist => ({
-      name: specialist.name,
-      value: specialist.id.toString()
+      name: `${specialist.name}`,
+      value: specialist.id.toString(),
+      icon: `http://localhost:4000/${specialist.avatar}`,
     } as ISelectOptions)));
+    if (type === 'specialist') setSpecialist(authUser.id.toString());
   }, [specialists])
+
+  useEffect(() => {
+    if (!users) return;
+    setUsersOptions(users.map(user => ({
+      name: `${user.name}`,
+      value: user.id.toString(),
+      icon: `http://localhost:4000/${user.avatar}`,
+    } as ISelectOptions)));
+    if (type === 'user') setUser(authUser.id.toString());
+  }, [users])
 
   const showSuccessAnimation = () => {
     setIsSaved(true);
@@ -72,25 +91,27 @@ const TaskCreateWidget: FC = () => {
   const handleTaskType = (event: SelectChangeEvent) => setTaskType(event.target.value);
   const handleTaskOrganization = (event: SelectChangeEvent) => setOrganization(event.target.value);
   const handleTaskSpecialist = (event: SelectChangeEvent) => setSpecialist(event.target.value);
+  const handleTaskUser = (event: SelectChangeEvent) => setUser(event.target.value);
   const handleTaskDescription = (event: ChangeEvent<HTMLTextAreaElement>) => setDescription(event.target.value);
   const handleTaskDateDue = (date: Date | null | undefined) => setDateDue(date);
 
   const handleForm = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
+
     try {
-      await createTask({
+      const newTask = await createTask({
         name,
-        dateDue: dateDue?.toISOString(),
+        due_date : dateDue?.toISOString(),
         status: "In progress",
         points: 0,
         description,
-        userId: authUser.id.toString(),
+        userId: user,
         specialistId: specialist,
         taskTypeId: taskType,
-        notificationId: "2",
         organizationId: organization,
       }).unwrap();
+      await setNotification(newTask);
       showSuccessAnimation();
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
@@ -99,6 +120,25 @@ const TaskCreateWidget: FC = () => {
       } else if (isErrorWithMessage(err)) {
         setError(err.message);
       }
+    }
+  }
+
+  const setNotification = async (task: ITask) => {
+    const userMessage =
+      type === 'specialist' ? `${task.specialist.name} has created ${name} task!` : `You have created ${name} task!`;
+    const specialistMessage =
+      type === 'specialist' ? `You have created ${name} task for ${task.user.name}!` : `${task.user.name} has created ${name} task `;
+
+    if (task) {
+      await createNotification({
+        taskId: task.id,
+        userId: Number(user),
+        specialistId: Number(specialist),
+        user_status: NotificationStatusEnum.scheduled,
+        specialist_status: NotificationStatusEnum.scheduled,
+        user_message: userMessage,
+        specialist_message: specialistMessage,
+      }).unwrap();
     }
   }
 
@@ -135,13 +175,20 @@ const TaskCreateWidget: FC = () => {
                           icon={organizationTaskIcon}/>
               </Grid>
               <Grid item md={6} xs={12}>
-                {type === "user" &&
-                    <MySelect label="Specialist"
-                              defaultOption="Select the specialist"
-                              onChange={handleTaskSpecialist}
-                              options={specialistsOptions}
-                              value={specialist}
-                              icon={specialistTaskIcon}/>
+                {type === "user" ?
+                  <MySelect label="Specialist"
+                            defaultOption="Select the specialist"
+                            onChange={handleTaskSpecialist}
+                            options={specialistsOptions}
+                            value={specialist}
+                            icon={specialistTaskIcon}/>
+                  :
+                  <MySelect label="Patient"
+                            defaultOption="Select the patient"
+                            onChange={handleTaskUser}
+                            options={usersOptions}
+                            value={user}
+                            icon={specialistTaskIcon}/>
                 }
               </Grid>
               <Grid item md={6} xs={12}>

@@ -1,58 +1,57 @@
-import React, {ChangeEvent, FC, FormEvent, useEffect} from "react";
+import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import {MySelect, ISelectOptions} from "../../../ui/MySelect/MySelect";
 import {Box, Grid, Stack} from "@mui/material";
 import {SelectChangeEvent} from "@mui/material/Select";
 import typeTaskIcon from '../../../ui/assets/typeTaskIcon.svg';
 import organizationTaskIcon from '../../../ui/assets/organizationTaskIcon.svg';
 import specialistTaskIcon from '../../../ui/assets/specialistTaskIcon.svg';
+import statusIcon from '../assets/statusIcon.svg';
 import MyTextarea from "../../../ui/MyTextarea";
 import MyButton from "../../../ui/MyButton";
 import MyDatePicker from "../../../ui/MyDatePicker";
 import MyInput from "../../../ui/MyInput";
+import DoneAlert from "../../../components/DoneAlert";
 import {tasksApi} from "../../../api/tasksApi";
-import {useParams} from "react-router-dom";
 import {taskTypesApi} from "../../../api/taskTypesApi";
 import {organizationsApi} from "../../../api/organizationsApi";
 import {specialistsApi} from "../../../api/specialistsApi";
 import {isErrorWithMessage, isFetchBaseQueryError} from "../../../helpers/errors";
-import DoneAlert from "../../../components/DoneAlert";
-
-const mockOptions: ISelectOptions[] = [
-  {
-    name: 'one',
-    value: '1',
-  },
-  {
-    name: 'two',
-    value: '2',
-  },
-  {
-    name: 'three',
-    value: '3',
-  }
-];
+import {TaskStatusesEnum} from "../enums/TaskStatusesEnum";
+import {useAppSelector} from "../../../hooks/redux";
+import {usersApi} from "../../../api/usersApi";
+import {ITask} from "../../../models/ITask";
+import {NotificationStatusEnum} from "../../notofications/enums/NotificationStatusEnum";
+import {notificationsApi} from "../../../api/notificationsApi";
 
 const TaskUpdateWidget: FC = () => {
   const {id} = useParams()
   const {data: task} = tasksApi.useFetchTaskByIdQuery(Number(id));
+  const {type} = useAppSelector(state => state.authReducer);
   const [updateTask] = tasksApi.useUpdateTaskMutation();
+  const [createNotification] = notificationsApi.useCreateNotificationMutation();
 
-  const [taskTypesOptions, setTaskTypesOptions] = React.useState<ISelectOptions[]>([]);
-  const [organizationsOptions, setOrganizationsOptions] = React.useState<ISelectOptions[]>([]);
-  const [specialistsOptions, setSpecialistsOptions] = React.useState<ISelectOptions[]>([]);
+  const [taskTypesOptions, setTaskTypesOptions] = useState<ISelectOptions[]>([]);
+  const [organizationsOptions, setOrganizationsOptions] = useState<ISelectOptions[]>([]);
+  const [specialistsOptions, setSpecialistsOptions] = useState<ISelectOptions[]>([]);
+  const [usersOptions, setUsersOptions] = useState<ISelectOptions[]>([]);
+  const [statusOptions, setStatusOptions] = useState<ISelectOptions[]>([]);
 
   const {data: taskTypes} = taskTypesApi.useFetchAllTaskTypesQuery();
   const {data: organizations} = organizationsApi.useFetchAllOrganizationsQuery();
   const {data: specialists} = specialistsApi.useFetchAllSpecialistsQuery();
+  const {data: users} = usersApi.useFetchAllUsersQuery();
 
-  const [name, setName] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [organization, setOrganization] = React.useState('');
-  const [specialist, setSpecialist] = React.useState('');
-  const [dateDue, setDateDue] = React.useState<Date | null | undefined>(null);
-  const [description, setDescription] = React.useState('');
-  const [error, setError] = React.useState('');
-  const [isSaved, setIsSaved] = React.useState(false);
+  const [name, setName] = useState('');
+  const [taskType, setTaskType] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [specialist, setSpecialist] = useState('');
+  const [user, setUser] = useState('');
+  const [dateDue, setDateDue] = useState<Date | null | undefined>(null);
+  const [status, setStatus] = useState('')
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     if (!taskTypes) return;
@@ -71,25 +70,51 @@ const TaskUpdateWidget: FC = () => {
   useEffect(() => {
     if (!specialists) return;
     setSpecialistsOptions(specialists.map(specialist => ({
-      name: specialist.name, value: specialist.id.toString()
+      name: `${specialist.name}`,
+      value: specialist.id.toString(),
+      icon: `http://localhost:4000/${specialist.avatar}`,
     } as ISelectOptions)));
   }, [specialists])
 
   useEffect(() => {
+    if (!users) return;
+    setUsersOptions(users.map(user => ({
+      name: `${user.name}`,
+      value: user.id.toString(),
+      icon: `http://localhost:4000/${user.avatar}`,
+    } as ISelectOptions)));
+  }, [users])
+
+  useEffect(() => {
+    setStatusOptions(
+      [
+        {value: TaskStatusesEnum.InProgress, name: TaskStatusesEnum.InProgress},
+        {value: TaskStatusesEnum.Done, name: TaskStatusesEnum.Done},
+        {value: TaskStatusesEnum.Overdue, name: TaskStatusesEnum.Overdue},
+        {value: TaskStatusesEnum.Undone, name: TaskStatusesEnum.Undone},
+      ]
+    );
+  }, [])
+
+  useEffect(() => {
     if (task) {
       setName(task.name);
-      setType(task.taskType.id.toString());
+      setTaskType(task.taskType.id.toString());
       setOrganization(task.organization.id.toString());
       setSpecialist(task.specialist.id.toString());
+      setUser(task.user.id.toString());
       setDateDue(new Date(task.dateDue));
       setDescription(task.description);
+      setStatus(task.status);
     }
   }, [task]);
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value);
-  const handleTaskType = (event: SelectChangeEvent) => setType(event.target.value);
+  const handleTaskType = (event: SelectChangeEvent) => setTaskType(event.target.value);
   const handleTaskOrganization = (event: SelectChangeEvent) => setOrganization(event.target.value);
   const handleTaskSpecialist = (event: SelectChangeEvent) => setSpecialist(event.target.value);
+  const handleTaskUser = (event: SelectChangeEvent) => setUser(event.target.value);
+  const handleTaskStatus = (event: SelectChangeEvent) => setStatus(event.target.value);
   const handleTaskDateDue = (date: Date | null | undefined) => setDateDue(date);
   const handleTaskDescription = (event: ChangeEvent<HTMLTextAreaElement>) => setDescription(event.target.value);
 
@@ -98,18 +123,19 @@ const TaskUpdateWidget: FC = () => {
     setError('');
     try {
       if (task) {
-        await updateTask({
+        const newTask = await updateTask({
           id: task.id,
           userId: task.user.id.toString(),
           specialistId: specialist,
-          taskTypeId: type,
+          taskTypeId: taskType,
           organizationId: organization,
-          notificationId: "2",
           name,
-          status: task.status,
+          status,
           points: 0,
-          description
+          description,
+          due_date : dateDue?.toISOString(),
         }).unwrap();
+        await setNotification(newTask);
         showSuccessAnimation();
       }
     } catch (err) {
@@ -119,6 +145,25 @@ const TaskUpdateWidget: FC = () => {
       } else if (isErrorWithMessage(err)) {
         setError(err.message);
       }
+    }
+  }
+
+  const setNotification = async (task: ITask) => {
+    const userMessage =
+      type === 'specialist' ? `${task.specialist.name} has updated ${name} task!` : `You have updated ${name} task!`;
+    const specialistMessage =
+      type === 'specialist' ? `You have updated ${name} task for ${task.user.name}!` : `${task.user.name} has updated ${name} task `;
+
+    if (task) {
+      await createNotification({
+        taskId: task.id,
+        userId: Number(user),
+        specialistId: Number(specialist),
+        user_status: NotificationStatusEnum.scheduled,
+        specialist_status: NotificationStatusEnum.scheduled,
+        user_message: userMessage,
+        specialist_message: specialistMessage,
+      }).unwrap();
     }
   }
 
@@ -148,7 +193,7 @@ const TaskUpdateWidget: FC = () => {
                           defaultOption="Select the task"
                           onChange={handleTaskType}
                           options={taskTypesOptions}
-                          value={type}
+                          value={taskType}
                           icon={typeTaskIcon}/>
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -159,17 +204,45 @@ const TaskUpdateWidget: FC = () => {
                           value={organization}
                           icon={organizationTaskIcon}/>
               </Grid>
-              <Grid item sm={6} xs={12}>
-                <MySelect label="Specialist/Patient"
-                          defaultOption="Select the specialist"
-                          onChange={handleTaskSpecialist}
-                          options={specialistsOptions}
-                          value={specialist}
-                          icon={specialistTaskIcon}/>
+              <Grid item sm={4} xs={12}>
+                {
+                  type === 'user' ?
+                    <MySelect label='Specialist'
+                              defaultOption="Select the specialist"
+                              onChange={handleTaskSpecialist}
+                              options={specialistsOptions}
+                              value={specialist}
+                              icon={specialistTaskIcon}/>
+                    :
+                    <MySelect label='Patient'
+                              defaultOption="Select the patient"
+                              onChange={handleTaskUser}
+                              options={usersOptions}
+                              value={user}
+                              icon={specialistTaskIcon}/>
+                }
+
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
                 <MyDatePicker label={'Due Date'} onChange={handleTaskDateDue} selected={dateDue}
                               placeholder="01/07/2023"></MyDatePicker>
+              </Grid>
+              <Grid item sm={4} xs={12}>
+                {
+                  status === TaskStatusesEnum.InProgress ?
+                    <MySelect label="Status"
+                              onChange={handleTaskStatus}
+                              options={statusOptions}
+                              value={status}
+                              icon={statusIcon}/>
+                    :
+                    <div className="task-option display-flex">
+                      <div className="option-label"><i className="icon"></i>Status :</div>
+                      <div className="option">
+                        <span className="badge badge-progress">{status}</span>
+                      </div>
+                    </div>
+                }
               </Grid>
               <Grid item sm={12} xs={12}>
                 <MyTextarea name="description" onChange={handleTaskDescription} value={description}
