@@ -18,7 +18,7 @@
     h3 {
       color: $black5;
       font-family: Satoshi-Bold, serif;
-      font-size: 18px;
+      font-size: 26px;
     }
 
     a {
@@ -70,69 +70,8 @@
         justify-content: right;
         -webkit-transform: translateZ(0); /* webkit flicker fix */
         -webkit-font-smoothing: antialiased; /* webkit text rendering fix */
-
-        .tooltip {
-          //background: #FFF;
-          color: $blue3;
-          display: block;
-          right: -20px;
-          bottom: -50px;
-          margin-bottom: 15px;
-          opacity: 0;
-          pointer-events: none;
-          position: absolute;
-          width: 100px;
-          transform: translateY(10px);
-          transition: all .25s ease-out;
-          box-shadow: 0px 8px 24px -4px rgba(173, 176, 184, 0.08), 0px 6px 12px -6px rgba(173, 176, 184, 0.12);
-          padding: 8px;
-          border-radius: 4px;
-        }
-
-        .tooltip:before {
-          bottom: -20px;
-          content: " ";
-          display: block;
-          height: 20px;
-          left: 0;
-          position: absolute;
-          width: 100%;
-        }
-
-        &:hover .tooltip {
-          opacity: 1;
-          pointer-events: auto;
-          transform: translateY(0px);
-        }
       }
     }
-  }
-
-  .badge {
-    padding: 8px 16px;
-    border-radius: 16px;
-    text-align: center;
-    width: 115px;
-  }
-
-  .badge-undone {
-    background-color: $red15;
-    color: $red3;
-  }
-
-  .badge-done {
-    background-color: $green15;
-    color: $green3;
-  }
-
-  .badge-overdue {
-    background-color: $orange0;
-    color: $orange3;
-  }
-
-  .badge-progress {
-    background-color: $blue15;
-    color: $blue3;
   }
 
   .lg {
@@ -161,6 +100,7 @@
   justify-content: space-between;
   margin-bottom: 20px;
   padding-left: 32px;
+  align-items: center;
 
   .tasks-filter {
     display: flex;
@@ -239,6 +179,22 @@
       }
     }
   }
+}
+
+.tasks-dialog {
+  .MuiPaper-root {
+    background-color: $blue1;
+  }
+
+  .flex-space-between {
+    display: flex;
+    justify-content: space-between;
+
+    .MuiSvgIcon-root {
+      cursor: pointer;
+    }
+  }
+
 }
 
 .task-options {
@@ -328,9 +284,19 @@
 }
 
 @media only screen and (max-width: 1279px) {
+  .badge {
+    padding: 6px 16px !important;
+    font-size: 13px;
+  }
   .tasks-area {
     .tasks-head {
       display: none;
+    }
+
+    .tasks-title {
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
     }
 
     .tasks-body-wrapper {
@@ -351,13 +317,17 @@
 
       .tasks-body-item .details {
         height: 21px;
+
+        button {
+          padding: 0;
+        }
       }
 
       .task-top-mobile {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 8px;
+        margin: 0;
         border-bottom: 1px solid $black1;
         padding-bottom: 32px;
 
@@ -400,6 +370,7 @@
         padding-top: 16px;
         display: flex;
         justify-content: space-between;
+        margin: 0 10px;
 
         div {
           color: $black4;
@@ -468,19 +439,34 @@
     padding: 0;
   }
 
+  .tooltip-background {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+  }
   .task-options {
     background-color: #FFF;
     margin-top: 0;
+    text-align: center;
+
+    .tasks-calendar {
+      margin-top: 30px;
+
+      .MuiButtonBase-root {
+        width: 100%;
+        height: 56px;
+        border: 2px solid $blue3;
+        border-radius: 8px;
+      }
+    }
 
     .task-option {
       display: flex;
 
       .option-label {
-        width: 40%;
+        width: 50%;
       }
 
       .option {
-        width: 60%;
+        width: 50%;
 
         b {
           width: 100%;
@@ -494,6 +480,10 @@
       }
     }
 
+    a {
+      width: 100%;
+    }
+
     .add-new-task-btn {
       width: 100%;
       display: flex;
@@ -501,5 +491,42 @@
       text-align: center;
     }
   }
+}
+
+.context-link {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 10px;
+  }
+}
+
+.badge {
+  padding: 8px 16px;
+  border-radius: 16px;
+  text-align: center;
+  width: 115px;
+}
+
+.badge-undone {
+  background-color: $red15;
+  color: $red3;
+}
+
+.badge-done {
+  background-color: $green15;
+  color: $green3;
+}
+
+.badge-overdue {
+  background-color: $orange0;
+  color: $orange3;
+}
+
+.badge-progress {
+  background-color: $blue15;
+  color: $blue3;
 }
 
