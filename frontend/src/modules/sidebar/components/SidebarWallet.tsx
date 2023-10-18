@@ -1,110 +1,73 @@
 import React, {FC, useEffect, useState} from "react";
 import {Button} from "@mui/material";
 import {useAppSelector} from "../../../hooks/redux";
-import {PhantomProvider} from "../../../models/IPhantomProvider";
 import {usersApi} from "../../../api/usersApi";
-import {clusterApiUrl, Connection, GetProgramAccountsFilter} from "@solana/web3.js";
-import {TOKEN_PROGRAM_ID} from "@solana/spl-token";
 import RefreshIcon from '@mui/icons-material/Refresh';
+import {Web3} from "web3";
+import {tokenAbi, tokenContractAddress} from "../../../contracts/scroll/contract";
 
 const SidebarWallet: FC = () => {
   const {authUser} = useAppSelector(state => state.authReducer)
   const {data: currentUser} = usersApi.useFetchUserByIdQuery(authUser.id);
   const [updateUser] = usersApi.useUpdateUserMutation();
 
-  const [provider, setProvider] = useState<PhantomProvider | undefined>(undefined);
-  const [walletKey, setWalletKey] = useState<PhantomProvider | undefined>(undefined);
+  const [walletKey, setWalletKey] = useState<string | undefined>(undefined);
   const [connected, setConnected] = useState<boolean>(false)
   const [balance, setBalance] = useState<number>(0)
 
-  const getProvider = (): PhantomProvider | undefined => {
-    if ("solana" in window) {
-      // @ts-ignore
-      const provider = window.solana as any;
-      if (provider.isPhantom) return provider as PhantomProvider;
-    }
-  };
-
-  const connectWallet = async () => {
-    // @ts-ignore
-    const {solana} = window;
-
-    if (solana) {
+  const connectToMetaMask = async () => {
+    if ((window as any).ethereum) {
       try {
-        const response = await solana.connect();
-        setWalletKey(response.publicKey.toString());
-        updateUser({
-          public_key: response.publicKey.toString(),
-          id: currentUser.id,
-          name: currentUser.name,
-          email: currentUser.email,
-          phone: currentUser.phone,
-          avatar: currentUser.avatar,
-          gender: currentUser.gender
-        })
-        await getBalance(response.publicKey);
-        setConnected(true);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+        await (window as any).ethereum.enable();
 
-  const disconnectWallet = async () => {
-    // @ts-ignore
-    const {solana} = window;
-
-    if (walletKey && solana) {
-      await (solana as PhantomProvider).disconnect();
-      setWalletKey(undefined);
-    }
-  };
-
-  const getBalance = async (wallet) => {
-    try {
-      const solana = new Connection(clusterApiUrl("testnet"), "confirmed");
-      const filters: GetProgramAccountsFilter[] = [
-        {
-          dataSize: 165
-        },
-        {
-          memcmp: {
-            offset: 32,
-            bytes: wallet
-          }
+        if ((window as any).ethereum) {
+          const web3 = new Web3((window as any).ethereum);
+          const accounts = await web3.eth.getAccounts();
+          setWalletKey(accounts[0]);
+          updateUser({
+            public_key: accounts[0],
+            id: currentUser.id,
+            name: currentUser.name,
+            email: currentUser.email,
+            phone: currentUser.phone,
+            avatar: currentUser.avatar,
+            gender: currentUser.gender,
+            chain: 'scroll',
+          })
+          await getUserTokenBalance(accounts[0]);
+          setConnected(true);
         }
-      ];
-
-      const tokenAccounts = await solana.getParsedProgramAccounts(TOKEN_PROGRAM_ID, {filters})
-      tokenAccounts.forEach((account) => {
-        const parsedAccountInfo = account.account.data;
-        const tokenBalance: number = parsedAccountInfo["parsed"]["info"]["tokenAmount"]["uiAmount"];
-        setBalance(tokenBalance);
-      });
-    } catch (e) {
-      console.error(e);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
-  useEffect(() => {
-    const provider = getProvider();
+  const getUserTokenBalance = async (userAddress) => {
+    const web3 = new Web3((window as any).ethereum);
+    const tokenContract = new web3.eth.Contract(tokenAbi, tokenContractAddress);
 
-    if (provider) setProvider(provider);
-    else setProvider(undefined);
-  }, []);
+    try {
+      // @ts-ignore
+      const balance1: number = await tokenContract.methods.balanceOf(userAddress).call();
+      setBalance(Number(balance1) / 10000000000000);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
       {
         !connected &&
-          <Button variant="contained" onClick={connectWallet}>Connect Wallet</Button>
+          <Button variant="contained" onClick={connectToMetaMask}>Connect Wallet</Button>
       }
 
       {
         connected &&
           <div className="wallet-balance-area">
-              BALANCE: {balance} AIDS
-              <RefreshIcon sx={{width: '20px', height: '20px'}} onClick={connectWallet}/>
+              BALANCE: <br/> {balance} AIDS
+              <RefreshIcon sx={{width: '20px', height: '20px'}} onClick={connectToMetaMask}/>
           </div>
       }
     </>

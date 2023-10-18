@@ -10,6 +10,10 @@ import {setNotification} from "../services/notifications";
 import {notificationsApi} from "../../../api/notificationsApi";
 import Loading from "../../../components/Loading";
 import {PhantomProvider} from "../../../models/IPhantomProvider";
+import {Web3} from "web3";
+import {tokenAbi, tokenContractAddress} from "../../../contracts/scroll/contract";
+
+const ethers = require('ethers');
 
 interface ITaskRewardProps {
   user: IUser;
@@ -21,76 +25,25 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
   const [updateTask] = tasksApi.useUpdateTaskMutation();
   const [createNotification] = notificationsApi.useCreateNotificationMutation();
 
-  const [provider, setProvider] = useState<PhantomProvider | undefined>(
-    undefined
-  );
-  const [walletKey, setWalletKey] = useState<PhantomProvider | undefined>(
-    undefined
-  );
-
+  const [provider, setProvider] = useState<string | undefined>(undefined);
+  const [walletKey, setWalletKey] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false)
 
-  const getProvider = (): PhantomProvider | undefined => {
-    if ("solana" in window) {
-      // @ts-ignore
-      const provider = window.solana as any;
-      if (provider.isPhantom) return provider as PhantomProvider;
-    }
-  };
+  const transferTokens = async () => {
+    const web3 = new Web3((window as any).ethereum);
+    const tokenContract = new web3.eth.Contract(tokenAbi, tokenContractAddress);
+    const senderAddress = '0xF4E00d71d285F65d824175E6C709B1CF01A68383';
+    const recipientAddress = '0xda79251323303eBBF57ad02b01Be26563d281CcC';
+    const amount = 100;
 
-  const transferTokenToRecipient = async () => {
     try {
-      setLoading(true);
-      const body = {
-        recipientPublicKey: user.public_key,
-        amount: Number(task.taskType.reward),
-        token: `${process.env.REACT_APP_TOKEN_CURRENCY}`,
-      }
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/blockchain/transfer`, body, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      updateTask({id: task.id, status: TaskStatusesEnum.Approved, pay_signature: response.data.signature});
-      setNotification(task, 'approved', type, createNotification);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
+      // @ts-ignore
+      const transaction = await tokenContract.methods.transferFrom(senderAddress, recipientAddress, amount).send({from: senderAddress});
+      console.log('Token transfer successful:', transaction);
+    } catch (error) {
+      console.error('Token transfer error:', error);
     }
   }
-
-  const connectWallet = async () => {
-    // @ts-ignore
-    const {solana} = window;
-
-    if (solana) {
-      try {
-        const response = await solana.connect();
-        setWalletKey(response.publicKey.toString());
-        await transferTokenToRecipient();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  const disconnectWallet = async () => {
-    // @ts-ignore
-    const {solana} = window;
-
-    if (walletKey && solana) {
-      await (solana as PhantomProvider).disconnect();
-      setWalletKey(undefined);
-    }
-  };
-
-  useEffect(() => {
-    const provider = getProvider();
-
-    if (provider) setProvider(provider);
-    else setProvider(undefined);
-  }, []);
 
   return (
     <>
@@ -101,7 +54,7 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
       {
         type === 'specialist' && task.status === TaskStatusesEnum.Done &&
           <>
-              <MyButton onClick={connectWallet}>
+              <MyButton onClick={transferTokens}>
                   Transfer Reward
               </MyButton>
           </>
@@ -111,18 +64,11 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
           <div>
               <h3>Approved Task:</h3>
               <h4>Blockchain Signature: </h4>
-              <a href={`https://explorer.solana.com/tx/${task.pay_signature}?cluster=testnet`} target="_blank" rel="noreferrer">
+              <a href={`https://explorer.solana.com/tx/${task.pay_signature}?cluster=testnet`} target="_blank"
+                 rel="noreferrer">
                   <small style={{fontSize: '12px'}}>{task.pay_signature}</small>
               </a>
           </div>
-      }
-      {
-        !provider && (
-          <p>
-            No provider found. Install{" "}
-            <a href="https://phantom.app/">Phantom Browser extension</a>
-          </p>
-        )
       }
     </>
   )
