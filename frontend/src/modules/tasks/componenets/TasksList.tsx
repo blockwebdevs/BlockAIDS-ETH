@@ -17,7 +17,7 @@ interface ITasksList {
 
 const TasksList: FC<ITasksList> = (props) => {
   const {type, authUser} = useAppSelector(state => state.authReducer);
-  const { heading} = props;
+  const {heading} = props;
   const [filtredTasks, setFiltredTasks] = useState<ITask[] | undefined>();
   let fetchTasks = tasksApi.useFetchAllTasksByUserIdQuery;
   if (type === 'specialist') {
@@ -69,7 +69,7 @@ const TasksList: FC<ITasksList> = (props) => {
                 </div>
                 <div className="tasks-head-item md">Task Name</div>
                 <div className="tasks-head-item md">Due Date</div>
-                <div className="tasks-head-item sm">Tokens</div>
+                <div className="tasks-head-item sm">Reward</div>
                 <div className="tasks-head-item sm">Status</div>
                 <div className="tasks-head-item xs"></div>
               </div>
