@@ -90,4 +90,4 @@ g | generate    generate gitignore files
 
 - **Contact Name:** Andrei Tintari
 - **Contact Email:** project@blockaids.world
-- **Website:** https://blockaids.world
+- **Website:** https://dev.blockaids.online
