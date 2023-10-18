@@ -5,10 +5,11 @@ import {ISidebarMenu} from "../types/ISidebarMenu";
 interface ISidebarMenuItem {
   menu: ISidebarMenu
 }
+
 const SidebarMenuItem: FC<ISidebarMenuItem> = ({menu}) => {
   return (
     <Link to={menu.url}>
-      <div className="menu-item">
+      <div className={`menu-item ${menu.className}`}>
         <div className="menu-item-icon">
           <img src={menu.icon} alt=""/>
         </div>
