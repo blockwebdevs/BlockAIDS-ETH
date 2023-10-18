@@ -17,7 +17,6 @@ import { TasksModule } from "./modules/tasks/tasks.module";
 import { TaskType } from "./modules/tasks/entities/task-type.entity";
 import { Task } from "./modules/tasks/entities/task.entity";
 import { AuthModule } from "./modules/auth/auth.module";
-import { BlockchainModule } from "./modules/blockchain/blockchain.module";
 
 @Module({
   imports: [
@@ -46,7 +45,6 @@ import { BlockchainModule } from "./modules/blockchain/blockchain.module";
     NotificationsModule,
     TasksModule,
     AuthModule,
-    BlockchainModule,
   ],
   controllers: [],
   providers: [],
