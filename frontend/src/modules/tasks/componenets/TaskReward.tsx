@@ -1,19 +1,17 @@
 import {FC, useEffect, useState} from "react";
 import MyButton from "../../../ui/MyButton";
-import axios from "axios";
 import {IUser} from "../../../models/IUser";
 import {ITask} from "../../../models/ITask";
 import {TaskStatusesEnum} from "../enums/TaskStatusesEnum";
 import {tasksApi} from "../../../api/tasksApi";
 import {useAppSelector} from "../../../hooks/redux";
-import {setNotification} from "../services/notifications";
 import {notificationsApi} from "../../../api/notificationsApi";
 import Loading from "../../../components/Loading";
-import {PhantomProvider} from "../../../models/IPhantomProvider";
-import {Web3} from "web3";
-import {tokenAbi, tokenContractAddress} from "../../../contracts/scroll/contract";
-
-const ethers = require('ethers');
+import {switchChain, connectToMetaMask, transferTokens} from "../../../helpers/metamask";
+import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
+import {polygonChainID} from "../../../contracts/polygon/contract";
+import {scrollChainId} from "../../../contracts/scroll/contract";
+import {setNotification} from "../services/notifications";
 
 interface ITaskRewardProps {
   user: IUser;
@@ -25,23 +23,40 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
   const [updateTask] = tasksApi.useUpdateTaskMutation();
   const [createNotification] = notificationsApi.useCreateNotificationMutation();
 
-  const [provider, setProvider] = useState<string | undefined>(undefined);
   const [walletKey, setWalletKey] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectedChain, setSelectedChain] = useState<number>();
 
-  const transferTokens = async () => {
-    const web3 = new Web3((window as any).ethereum);
-    const tokenContract = new web3.eth.Contract(tokenAbi, tokenContractAddress);
-    const senderAddress = '0xF4E00d71d285F65d824175E6C709B1CF01A68383';
-    const recipientAddress = '0xda79251323303eBBF57ad02b01Be26563d281CcC';
-    const amount = 100;
+  useEffect(() => {
+    if (type === 'specialist') {
+      if (task.status === TaskStatusesEnum.Done) {
+        connectToMetaMask().then((result) => {
+          setSelectedChain(result.chainId);
+          console.log(result.chainId);
+          setWalletKey(result.account);
+        });
+      }
+    }
+  }, []);
+  const handleSwitchChain = async (chainId: number) => {
+    setSelectedChain(chainId);
+    await switchChain(chainId);
+  }
 
-    try {
-      // @ts-ignore
-      const transaction = await tokenContract.methods.transferFrom(senderAddress, recipientAddress, amount).send({from: senderAddress});
-      console.log('Token transfer successful:', transaction);
-    } catch (error) {
-      console.error('Token transfer error:', error);
+  const handleTransferReward = async () => {
+    const recipientAddress = task.user.public_key;
+    if (recipientAddress) {
+      try {
+        const amount = Number(task.taskType.reward) * 1000000000;
+        setLoading(true);
+        const transactionLink = await transferTokens(selectedChain, walletKey, recipientAddress, amount);
+        updateTask({id: task.id, status: TaskStatusesEnum.Approved, pay_signature: transactionLink});
+        setNotification(task, 'approved', type, createNotification);
+        setLoading(false);
+      } catch (e) {
+        console.error(e);
+        setLoading(false);
+      }
     }
   }
 
@@ -54,7 +69,28 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
       {
         type === 'specialist' && task.status === TaskStatusesEnum.Done &&
           <>
-              <MyButton onClick={transferTokens}>
+              <div>
+                  <FormControl>
+                      <FormLabel id="demo-row-radio-buttons-group-label">Choose blockchain:</FormLabel>
+                      <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                      >
+                          <FormControlLabel value="scroll" control={<Radio/>}
+                                            onChange={() => handleSwitchChain(scrollChainId)}
+                                            checked={selectedChain === scrollChainId}
+                                            label="Scroll Sopelia"/>
+                          <FormControlLabel value="polygon" control={<Radio/>}
+                                            onChange={() => handleSwitchChain(polygonChainID)}
+                                            checked={selectedChain === polygonChainID}
+                                            label="Polygon Mumbai"/>
+                        {/*<FormControlLabel value="mantle" control={<Radio/>} onChange={() => switchChain(134351)}*/}
+                        {/*                  label="Mantle Testnet"/>*/}
+                      </RadioGroup>
+                  </FormControl>
+              </div>
+              <MyButton onClick={handleTransferReward}>
                   Transfer Reward
               </MyButton>
           </>
@@ -63,11 +99,12 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
         task.status === TaskStatusesEnum.Approved &&
           <div>
               <h3>Approved Task:</h3>
-              <h4>Blockchain Signature: </h4>
-              <a href={`https://explorer.solana.com/tx/${task.pay_signature}?cluster=testnet`} target="_blank"
-                 rel="noreferrer">
-                  <small style={{fontSize: '12px'}}>{task.pay_signature}</small>
-              </a>
+              <h4>
+                  <a href={`https://explorer.solana.com/tx/${task.pay_signature}?cluster=testnet`} target="_blank"
+                     rel="noreferrer">
+                      <small style={{fontSize: '12px'}}>View on block explorer</small>
+                  </a>
+              </h4>
           </div>
       }
     </>
