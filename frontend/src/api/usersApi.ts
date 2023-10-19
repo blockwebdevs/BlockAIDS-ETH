@@ -1,12 +1,10 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
-import {ISpecialist} from "../models/ISpecialist";
 import {IUser} from "../models/IUser";
-import {ITaskType} from "../models/ITaskType";
 
 export const usersApi = createApi({
     reducerPath: 'users',
     baseQuery: fetchBaseQuery({
-      baseUrl: 'http://localhost:4000/api',
+      baseUrl: `${process.env.REACT_APP_BACKEND_URL}/api`,
     }),
     tagTypes: ['Users'],
     endpoints: (build) => ({
@@ -28,6 +26,7 @@ export const usersApi = createApi({
           bodyFormData.append('name', user.name);
           bodyFormData.append('email', user.email);
           bodyFormData.append('phone', user.phone);
+          bodyFormData.append('public_key', user.public_key);
           bodyFormData.append('gender', user.gender);
           if (user.birthdate) {
             bodyFormData.append('birthdate', user.birthdate);

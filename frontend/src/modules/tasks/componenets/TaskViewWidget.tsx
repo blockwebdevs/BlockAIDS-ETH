@@ -11,9 +11,10 @@ import {TasksList} from "../index";
 import {tasksApi} from "../../../api/tasksApi";
 import {TaskStatusesEnum} from "../enums/TaskStatusesEnum";
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import TaskReward from "./TaskReward";
 
 const TaskViewWidget: FC = () => {
-  const {id} = useParams()
+  const {id} = useParams();
   const {data: task} = tasksApi.useFetchTaskByIdQuery(Number(id));
 
   return (
@@ -32,7 +33,7 @@ const TaskViewWidget: FC = () => {
                           </div>
                           <div className="option">
                               <Avatar className="avatar" sx={{width: 32, height: 32}}
-                                      src={`http://localhost:4000/${task.user.avatar}`}></Avatar>
+                                      src={`${process.env.REACT_APP_BACKEND_URL}/${task.user.avatar}`}></Avatar>
                               <div>{task.user.name}</div>
                           </div>
                       </Grid>
@@ -43,7 +44,7 @@ const TaskViewWidget: FC = () => {
                           </div>
                           <div className="option">
                               <Avatar className="avatar" sx={{width: 32, height: 32}}
-                                      src={`http://localhost:4000/${task.specialist.avatar}`}></Avatar>
+                                      src={`${process.env.REACT_APP_BACKEND_URL}/${task.specialist.avatar}`}></Avatar>
                               <div>{task.specialist.name}</div>
                           </div>
                       </Grid>
@@ -77,8 +78,14 @@ const TaskViewWidget: FC = () => {
                                 <span className="badge badge-done">{task.status}</span>}
                             {task.status === TaskStatusesEnum.Overdue &&
                                 <span className="badge badge-overdue">{task.status}</span>}
-                            {task.status === TaskStatusesEnum.Undone &&
+                            {task.status === TaskStatusesEnum.Cancelled &&
                                 <span className="badge badge-undone">{task.status}</span>}
+                            {task.status === TaskStatusesEnum.Disapproved &&
+                                <span className="badge badge-undone">{task.status}</span>}
+                            {task.status === TaskStatusesEnum.Assigned &&
+                                <span className="badge badge-progress">{task.status}</span>}
+                            {task.status === TaskStatusesEnum.Approved &&
+                                <span className="badge badge-done">{task.status}</span>}
                           </div>
                       </Grid>
                       <Grid item sm={6} xs={12} className="task-option">
@@ -87,13 +94,19 @@ const TaskViewWidget: FC = () => {
                               Reward
                           </div>
                           <div className="option">
-                              <span>{task.taskType.reward} SOL</span>
+                              <span>{task.taskType.reward} {process.env.REACT_APP_TOKEN_CURRENCY}</span>
                           </div>
                       </Grid>
+                      <Grid item sm={6} xs={6}>
+                          <Link to={`/tasks/update/${task.id}`}>
+                              <MyButton>Update Task</MyButton>
+                          </Link>
+                      </Grid>
+                      <Grid item sm={6} xs={6}>
+                          <TaskReward task={task} user={task.user}/>
+                      </Grid>
                   </Grid>
-                  <Link to={`/tasks/update/${task.id}`}>
-                      <MyButton>Update Task</MyButton>
-                  </Link>
+
               </div>
           </div>
       }
