@@ -21,6 +21,11 @@
       text-align: left;
       margin-top: 25px;
 
+      .wallet-key {
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+
       .wallet-balance-area {
         display: flex;
         justify-content: space-between;

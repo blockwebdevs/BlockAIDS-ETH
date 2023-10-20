@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, MouseEvent, useEffect, useState} from "react";
 import MyButton from "../../../ui/MyButton";
 import {IUser} from "../../../models/IUser";
 import {ITask} from "../../../models/ITask";
@@ -7,11 +7,12 @@ import {tasksApi} from "../../../api/tasksApi";
 import {useAppSelector} from "../../../hooks/redux";
 import {notificationsApi} from "../../../api/notificationsApi";
 import Loading from "../../../components/Loading";
-import {switchChain, connectToMetaMask, transferTokens} from "../../../helpers/metamask";
+import {switchChain, connectToMetaMask, transferTokens, getNetworkId} from "../../../helpers/metamask";
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
 import {polygonChainID} from "../../../contracts/polygon/contract";
 import {scrollChainId} from "../../../contracts/scroll/contract";
 import {setNotification} from "../services/notifications";
+import {IEthereum} from "../../../models/IEthereum";
 
 interface ITaskRewardProps {
   user: IUser;
@@ -28,35 +29,63 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
   const [selectedChain, setSelectedChain] = useState<number>();
 
   useEffect(() => {
+      const ethereum: IEthereum = (window as any).ethereum
+      if (ethereum) {
+        ethereum.on('chainChanged', () => {
+          connectWallet();
+        })
+        ethereum.on('accountsChanged', () => {
+          connectWallet();
+        })
+      }
+    }
+  )
+
+  useEffect(() => {
+    connectWallet();
+  }, []);
+
+  const connectWallet = () => {
     if (type === 'specialist') {
       if (task.status === TaskStatusesEnum.Done) {
         connectToMetaMask().then((result) => {
-          setSelectedChain(result.chainId);
-          console.log(result.chainId);
-          setWalletKey(result.account);
+          if (result) {
+            setSelectedChain(result.chainId);
+            setWalletKey(result.account);
+          }
+        }).catch(e => {
+          console.error();
         });
       }
     }
-  }, []);
+  }
+
   const handleSwitchChain = async (chainId: number) => {
-    setSelectedChain(chainId);
     await switchChain(chainId);
+    const switchedChain = await getNetworkId();
+    setSelectedChain(switchedChain);
   }
 
   const handleTransferReward = async () => {
     const recipientAddress = task.user.public_key;
-    if (recipientAddress) {
-      try {
-        const amount = Number(task.taskType.reward) * 1000000000;
-        setLoading(true);
-        const transactionLink = await transferTokens(selectedChain, walletKey, recipientAddress, amount);
-        updateTask({id: task.id, status: TaskStatusesEnum.Approved, pay_signature: transactionLink});
-        setNotification(task, 'approved', type, createNotification);
-        setLoading(false);
-      } catch (e) {
-        console.error(e);
-        setLoading(false);
+    if (selectedChain === polygonChainID || selectedChain === scrollChainId) {
+      if (recipientAddress) {
+        try {
+          const amount = Number(task.taskType.reward) * 1000000000;
+          setLoading(true);
+          const transactionLink = await transferTokens(selectedChain, walletKey, recipientAddress, amount);
+          if (transactionLink) {
+            updateTask({id: task.id, status: TaskStatusesEnum.Approved, pay_signature: transactionLink});
+            setNotification(task, 'approved', type, createNotification);
+          }
+          setLoading(false);
+        } catch (e) {
+          console.error(e);
+          setLoading(false);
+        }
       }
+    } else {
+      alert('Choose a blockchain!')
     }
   }
 
@@ -100,7 +129,7 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
           <div>
               <h3>Approved Task:</h3>
               <h4>
-                  <a href={`https://explorer.solana.com/tx/${task.pay_signature}?cluster=testnet`} target="_blank"
+                  <a href={task.pay_signature} target="_blank"
                      rel="noreferrer">
                       <small style={{fontSize: '12px'}}>View on block explorer</small>
                   </a>
