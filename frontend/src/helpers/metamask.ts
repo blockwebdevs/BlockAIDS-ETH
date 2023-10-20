@@ -15,7 +15,11 @@ export const connectToMetaMask = async () => {
         // @ts-ignore
         const web3 = new Web3((window as any).ethereum);
         const accounts = await web3.eth.getAccounts();
-        const chainId = await getNetworkId();
+        let chainId = await getNetworkId();
+        if ((chainId !== scrollChainId) && (chainId !== polygonChainID)) {
+          await switchChain(scrollChainId);
+        }
+        chainId = await getNetworkId();
         return {account: accounts[0], chainId};
       }
     } catch (error) {
@@ -82,6 +86,6 @@ export const transferTokens = async (chainId, senderAddress, recipientAddress, a
     const transaction = await tokenContract.methods.transferFrom(holderAddress, recipientAddress, amount).send({from: senderAddress});
     return explorer + transaction.transactionHash;
   } catch (error) {
-    console.error('Token transfer error:', error);
+    console.error(error);
   }
 }
