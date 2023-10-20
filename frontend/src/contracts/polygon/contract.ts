@@ -1,9 +1,11 @@
 export const polygonExplorer = 'https://mumbai.polygonscan.com/tx/';
 export const polygonChainID = 80001;
-
-export const polygonContractAddress = '0xE61dB4Fd73c858Bd6c2B981086b7E07175D99310';
-
-export const polygonContractAbi = [{"inputs": [], "stateMutability": "nonpayable", "type": "constructor"}, {
+export const polygonContractAddress = '0x17Ab7F70751baB07102173E5201DC73992043B29';
+export const polygonContractAbi = [{
+  "inputs": [],
+  "stateMutability": "nonpayable",
+  "type": "constructor"
+}, {
   "anonymous": false,
   "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {
     "indexed": true,
@@ -24,9 +26,9 @@ export const polygonContractAbi = [{"inputs": [], "stateMutability": "nonpayable
   "name": "Transfer",
   "type": "event"
 }, {
-  "inputs": [{"internalType": "address", "name": "owner", "type": "address"}, {
+  "inputs": [{"internalType": "address", "name": "", "type": "address"}, {
     "internalType": "address",
-    "name": "delegate",
+    "name": "",
     "type": "address"
   }],
   "name": "allowance",
@@ -34,24 +36,18 @@ export const polygonContractAbi = [{"inputs": [], "stateMutability": "nonpayable
   "stateMutability": "view",
   "type": "function"
 }, {
-  "inputs": [{"internalType": "address", "name": "delegate", "type": "address"}, {
+  "inputs": [{"internalType": "address", "name": "spender", "type": "address"}, {
     "internalType": "uint256",
-    "name": "numTokens",
+    "name": "value",
     "type": "uint256"
   }],
   "name": "approve",
-  "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+  "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
   "stateMutability": "nonpayable",
   "type": "function"
 }, {
-  "inputs": [{"internalType": "address", "name": "tokenOwner", "type": "address"}],
+  "inputs": [{"internalType": "address", "name": "", "type": "address"}],
   "name": "balanceOf",
-  "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-  "stateMutability": "view",
-  "type": "function"
-}, {
-  "inputs": [],
-  "name": "count",
   "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
   "stateMutability": "view",
   "type": "function"
@@ -60,12 +56,6 @@ export const polygonContractAbi = [{"inputs": [], "stateMutability": "nonpayable
   "name": "decimals",
   "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
   "stateMutability": "view",
-  "type": "function"
-}, {
-  "inputs": [],
-  "name": "increment",
-  "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-  "stateMutability": "nonpayable",
   "type": "function"
 }, {
   "inputs": [],
@@ -86,23 +76,23 @@ export const polygonContractAbi = [{"inputs": [], "stateMutability": "nonpayable
   "stateMutability": "view",
   "type": "function"
 }, {
-  "inputs": [{"internalType": "address", "name": "receiver", "type": "address"}, {
+  "inputs": [{"internalType": "address", "name": "to", "type": "address"}, {
     "internalType": "uint256",
-    "name": "numTokens",
+    "name": "value",
     "type": "uint256"
   }],
   "name": "transfer",
-  "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+  "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
   "stateMutability": "nonpayable",
   "type": "function"
 }, {
-  "inputs": [{"internalType": "address", "name": "owner", "type": "address"}, {
+  "inputs": [{"internalType": "address", "name": "from", "type": "address"}, {
     "internalType": "address",
-    "name": "buyer",
+    "name": "to",
     "type": "address"
-  }, {"internalType": "uint256", "name": "numTokens", "type": "uint256"}],
+  }, {"internalType": "uint256", "name": "value", "type": "uint256"}],
   "name": "transferFrom",
-  "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+  "outputs": [{"internalType": "bool", "name": "success", "type": "bool"}],
   "stateMutability": "nonpayable",
   "type": "function"
 }];

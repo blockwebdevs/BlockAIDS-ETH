@@ -13,6 +13,7 @@ import {polygonChainID} from "../../../contracts/polygon/contract";
 import {scrollChainId} from "../../../contracts/scroll/contract";
 import {setNotification} from "../services/notifications";
 import {IEthereum} from "../../../models/IEthereum";
+import {mantleChainID} from "../../../contracts/mantle/contract";
 
 interface ITaskRewardProps {
   user: IUser;
@@ -68,7 +69,7 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
 
   const handleTransferReward = async () => {
     const recipientAddress = task.user.public_key;
-    if (selectedChain === polygonChainID || selectedChain === scrollChainId) {
+    if (selectedChain === polygonChainID || selectedChain === scrollChainId || selectedChain === mantleChainID) {
       if (recipientAddress) {
         try {
           const amount = Number(task.taskType.reward) * 1000000000;
@@ -114,8 +115,10 @@ const TaskReward: FC<ITaskRewardProps> = ({user, task}) => {
                                             onChange={() => handleSwitchChain(polygonChainID)}
                                             checked={selectedChain === polygonChainID}
                                             label="Polygon Mumbai"/>
-                        {/*<FormControlLabel value="mantle" control={<Radio/>} onChange={() => switchChain(134351)}*/}
-                        {/*                  label="Mantle Testnet"/>*/}
+                          <FormControlLabel value="polygon" control={<Radio/>}
+                                            onChange={() => handleSwitchChain(mantleChainID)}
+                                            checked={selectedChain === mantleChainID}
+                                            label="Mantle Testnet"/>
                       </RadioGroup>
                   </FormControl>
               </div>

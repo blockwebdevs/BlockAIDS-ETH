@@ -1,8 +1,11 @@
 export const scrollExplorer = 'https://sepolia.scrollscan.dev/tx/';
 export const scrollChainId = 534351;
-export const scrollContractAddress = '0xD79E764fb5BEcc835Be22b328C83EC93BB330fd5';
-
-export const scrollContractAbi = [{"inputs": [], "stateMutability": "nonpayable", "type": "constructor"}, {
+export const scrollContractAddress = '0x53ACC15CFf0af3eF4962714238CB9b8c9e842631';
+export const scrollContractAbi = [{
+  "inputs": [],
+  "stateMutability": "nonpayable",
+  "type": "constructor"
+}, {
   "anonymous": false,
   "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {
     "indexed": true,
