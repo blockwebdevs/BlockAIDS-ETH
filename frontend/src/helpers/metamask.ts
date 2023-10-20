@@ -5,6 +5,7 @@ import {
   polygonExplorer
 } from "../contracts/polygon/contract";
 import {scrollChainId, scrollContractAbi, scrollContractAddress, scrollExplorer} from "../contracts/scroll/contract";
+import {mantleChainID, mantleContractAbi, mantleContractAddress, mantleExplorer} from "../contracts/mantle/contract";
 
 export const connectToMetaMask = async () => {
   if ((window as any).ethereum) {
@@ -15,7 +16,11 @@ export const connectToMetaMask = async () => {
         // @ts-ignore
         const web3 = new Web3((window as any).ethereum);
         const accounts = await web3.eth.getAccounts();
-        const chainId = await getNetworkId();
+        let chainId = await getNetworkId();
+        if ((chainId !== scrollChainId) && (chainId !== polygonChainID) && (chainId !== mantleChainID)) {
+          await switchChain(scrollChainId);
+        }
+        chainId = await getNetworkId();
         return {account: accounts[0], chainId};
       }
     } catch (error) {
@@ -30,6 +35,9 @@ export const getUserTokenBalance = async (userAddress: string, chainId: number) 
   let tokenContract = new web3.eth.Contract(scrollContractAbi, scrollContractAddress);
   if (chainId === polygonChainID) {
     tokenContract = new web3.eth.Contract(polygonContractAbi, polygonContractAddress);
+  }
+  if (chainId === mantleChainID) {
+    tokenContract = new web3.eth.Contract(mantleContractAbi, mantleContractAddress);
   }
 
   try {
@@ -74,6 +82,10 @@ export const transferTokens = async (chainId, senderAddress, recipientAddress, a
     tokenContract = new web3.eth.Contract(polygonContractAbi, polygonContractAddress);
     explorer = polygonExplorer;
   }
+  if (chainId === mantleChainID) {
+    tokenContract = new web3.eth.Contract(mantleContractAbi, mantleContractAddress);
+    explorer = mantleExplorer;
+  }
 
   const holderAddress = '0xF4E00d71d285F65d824175E6C709B1CF01A68383';
 
@@ -82,6 +94,6 @@ export const transferTokens = async (chainId, senderAddress, recipientAddress, a
     const transaction = await tokenContract.methods.transferFrom(holderAddress, recipientAddress, amount).send({from: senderAddress});
     return explorer + transaction.transactionHash;
   } catch (error) {
-    console.error('Token transfer error:', error);
+    console.error(error);
   }
 }
