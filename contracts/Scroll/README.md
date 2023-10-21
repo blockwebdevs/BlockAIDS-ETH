@@ -22,19 +22,19 @@ To date, we've accomplished the following:
 ![17 05 2020-3](https://github.com/w3f/Grants-Program/assets/59833178/bd821d36-ca41-401a-b174-08587c36f001)
 
 ### Project Details
-We are building for our users (people living with HIV and those from groups at risk) the Loyalty and Reward Electronic System - a network designed to promote and incentivize healthy behaviors and preventive measures for individuals living with HIV as well as those from high-risk groups such as drug users, LGBT individuals, and sex workers. By utilizing a comprehensive range of rewards and benefits, the system aims to ensure that individuals engage in regular activities that contribute to their overall health, well-being, and the safety of others.
+As mentioned above, we are committed to building PledgePositive, an integral component of the BlockAIDs application designed to promote and incentivize healthy behaviors and preventive measures for individuals living with HIV as well as those from high-risk groups. This incentivization framework aims to ensure that individuals engage in regular activities that contribute to their overall health, well-being, and the safety of others.
 
-The system incorporates various modules and features to address the specific needs of the target populations:
+**PledgePositive incorporates various modules and features to address the specific needs of our beneficiary populations:**
 
-- Treatment Adherence and Health Management: The system encourages individuals living with HIV to adhere to their treatment plans by providing rewards for consistently taking prescribed medications, attending medical appointments, and undergoing necessary tests and analyses. It includes reminders for medication schedules and tracking mechanisms to monitor progress and achievements.
+- **Treatment Adherence and Health Management:** The primary need we seek to address is adherence to treatment plans by providing rewards for consistently taking prescribed medications, attending medical appointments, and undergoing necessary tests and analyses. This feature includes reminders for medication schedules and tracking mechanisms to monitor progress and achievements.
  
-- Preventive Measures: For individuals from high-risk groups, the system emphasizes the importance of preventive measures to reduce the risk of HIV infection. It incentivizes the use of condoms, provides access to sterile needless syringes, and promotes the utilization of social assistance services such as counseling, education programs, and testing facilities.
+- **Preventive Measures:** For individuals from high-risk groups, PledgePositive emphasizes the importance of preventive measures to reduce the risk of HIV infection. It incentivizes the use of condoms, provides access to sterile needless syringes, and promotes the use of social assistance services such as counseling, education programs, and testing facilities.
 
-- Education and Resources: The system features an extensive resource center with educational materials, articles, videos, and interactive tools that provide valuable information on HIV prevention, treatment, and overall health maintenance. Users can earn rewards by actively engaging with these educational resources, empowering them with the knowledge to make informed decisions.
+- **Education and Resources:** PledgePositive features an extensive resource center with educational materials, articles, videos, and interactive tools that provide valuable information on HIV prevention, treatment, and overall health maintenance. Users can earn rewards by actively engaging with these educational resources, empowering them with the knowledge to make informed decisions along their journey to improved health outcomes.
 
-- Support Networks and Community Engagement: The platform facilitates the formation of support networks and communities, enabling individuals to connect with others facing similar challenges. It offers online support groups, forums, and messaging capabilities to foster social connections, exchange experiences, and seek guidance from peers.
+- **Support Networks & Community Engagement:** PledgePositive facilitates the formation of support networks and communities, forging meaningful connections amongst individuals and/or groups facing similar challenges. It offers online support groups, forums, and messaging capabilities to foster social connections, exchange experiences, and seek guidance from peers.
 
-- Rewards and Incentives: The loyalty system provides a range of rewards and incentives to motivate and recognize positive behaviors. We want to make the rewards more tangible for users, that's why we need an impact and reward token.
+- **Rewards and Incentives:** PledgePositive provides a range of rewards and incentives to motivate and recognize positive behaviors. To make the rewards more tangible for users, we have created for their usage an impact and reward token.
 
   ![art_03-fe308d](https://github.com/w3f/Grants-Program/assets/59833178/3c522f8c-b38b-4126-82dd-6537c674fae3)
 
