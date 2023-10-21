@@ -1,6 +1,6 @@
 ![Youtube-cover-compressed](https://github.com/w3f/Grants-Program/assets/59833178/8f9f53ba-440f-4858-bcec-344dcf0dda24)
 
-### Overview
+### BlockAIDS Summary
 
 BlockAIDS is a decentralized ecosystem that harnesses the power of blockchain and web3 technologies to serve millions of people living with HIV/AIDS and key at-risk populations (e.g. intravenous drug users, members of the LGBTQ community, commercial sex workers). Utilization of this world-class, secure, and private application restores sovereignty to people affected by this disease by providing access to records, medications, goods, and services from any place in the world. Additionally, and equally important, the BlockAIDS community serves as a self-governed platform for enhancing the product itself, education about managing and preventing the disease, and supporting community initiatives.
 
@@ -10,6 +10,8 @@ We are currently building PledgePositive, an adherence tracker and encouragement
 
 
 **Why our team is interested in creating this project**:
+
+
 The World Health Organization estimates that nearly 40 million people across the globe live with HIV/AIDS. In the past decade, however, we've learned that the disease does not have to be a death sentence. Due to breakthrough treatments such as rigorous antiretroviral regimens, combined with regular access to healthcare and prevention knowledge, there is hope. The hope of giving people diagnosed with HIV a chance to lead healthy, fulfilling lives and the hope of slowing the spread of HIV/AIDs is why we're building this platform. 
 
 For more than 10 years, BlockAIDS has been working with people living with HIV/AIDS and with at-risk populations, offering them care, support, and assistance.
