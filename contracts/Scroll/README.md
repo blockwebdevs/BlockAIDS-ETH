@@ -2,20 +2,22 @@
 
 ### Overview
 
-BlockAIDS -  a decentralized electronic ecosystem on the blockchain, that allows millions of people living with HIV and key affected populations (e.g. intravenous drug users, members of the LGBTQ community, commercial sex workers) to access their records, medicines, goods and services from any place in the world.
+BlockAIDS is a decentralized ecosystem that harnesses the power of blockchain and web3 technologies to serve millions of people living with HIV/AIDS and key at-risk populations (e.g. intravenous drug users, members of the LGBTQ community, commercial sex workers). Utilization of this world-class, secure, and private application restores sovereignty to people affected by this disease by providing access to records, medications, goods, and services from any place in the world. Additionally, and equally important, the BlockAIDS community serves as a self-governed platform for enhancing the product itself, education about managing and preventing the disease, and supporting community initiatives.
 
-Our ecosystem currently comprises 19 service centers (physical locations that provide HIV patients with medications and services). In Moldova, where the project launched, our software already supports 50K active users and over 1M transactions (medical records). We are now building a global digital storage platform for 5 countries (Ukraine, Georgia, Kazakhstan, Moldova, and Kyrgyzstan) and more than 1 million users. BlockAIDS is supported by international organizations from the UN family, such as UNAIDS.
+Our ecosystem currently comprises 19 service centers (physical locations that provide HIV patients with medications and services). In the Republic of Moldova, where the project launched, our software already supports 50K active users and over 1M transactions (medical records). We are now building a global digital storage platform for 5 countries (Ukraine, Georgia, Kazakhstan, Moldova, and Kyrgyzstan) and more than 1 million users. BlockAIDS is supported by international organizations and NGOs, such as UNAIDS.
 
-We are building for our users (people living with HIV and key affected populations) a Loyalty and Rewards System - a subnet designed to promote and incentivize healthy behaviors, medication adherence practices, and preventive measures. By utilizing a comprehensive range of rewards and benefits, the system aims to ensure that individuals engage in regular activities that contribute to their overall health, well-being, and the safety of others.
+We are currently building PledgePositive, an adherence tracker and encouragement platform - a subnet designed to promote and incentivize healthy behaviors, medication adherence practices, and preventive measures. By utilizing a comprehensive range of rewards and benefits, the system aims to ensure that individuals engage in regular activities that contribute to their overall health, well-being, and the safety of others.
 
 
 **Why our team is interested in creating this project**:
-We are working with people living with HIV and those from groups at risk for more than 10 Years, by offering them care, support and assistance.
-We have currently in our ecosystem:
+The World Health Organization estimates that nearly 40 million people across the globe live with HIV/AIDS. In the past decade, however, we've learned that the disease does not have to be a death sentence. Due to breakthrough treatments such as rigorous antiretroviral regimens, combined with regular access to healthcare and prevention knowledge, there is hope. The hope of giving people diagnosed with HIV a chance to lead healthy, fulfilling lives and the hope of slowing the spread of HIV/AIDs is why we're building this platform. 
+
+For more than 10 years, BlockAIDS has been working with people living with HIV/AIDS and with at-risk populations, offering them care, support, and assistance.
+To date, we've accomplished the following: 
 - 19 medical and service providers centers
-- ≈ 250 employees (doctors, therapists, social assistance providers, case managers, researchers, management team, etc.)
-- 50k active users and over 1 mln transactions (medical records) in Moldova
-- development team in source
+- ~250 employees (doctors, therapists, social assistance providers, case managers, researchers, management team, etc.)
+- 50K active users and over 1M transactions (medical records) in Moldova
+- Development team in source
 
 ![17 05 2020-3](https://github.com/w3f/Grants-Program/assets/59833178/bd821d36-ca41-401a-b174-08587c36f001)
 
