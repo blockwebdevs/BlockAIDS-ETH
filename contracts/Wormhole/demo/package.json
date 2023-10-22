@@ -1,0 +1,13 @@
+{
+  "name": "wormhole-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^6.8.0",
+    "wormhole-sdk": "^1.6.0"
+  }
+}
