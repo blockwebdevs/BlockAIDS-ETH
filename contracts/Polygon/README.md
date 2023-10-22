@@ -25,6 +25,10 @@ full [BlockAIDS Summary](../README.md).
 
 ![explorer-docs.png](./docs/images/explorer-docs.png)
 
+## Smart Contract
+
+[https://mumbai.polygonscan.com/token/0x17ab7f70751bab07102173e5201dc73992043b29](https://mumbai.polygonscan.com/token/0x17ab7f70751bab07102173e5201dc73992043b29)
+
 ## Deploy Smart Contract Using Remix:
 
 - Create a file on Remix, accessing [https://remix.ethereum.org/](https://remix.ethereum.org/)

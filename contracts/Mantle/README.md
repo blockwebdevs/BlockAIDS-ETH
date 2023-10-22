@@ -25,6 +25,10 @@ full [BlockAIDS Summary](../README.md).
 
 ![explorer-docs.png](./docs/images/explorer-docs.png)
 
+## Smart Contract
+
+[https://explorer.testnet.mantle.xyz/token/0xD3d65B24F2813eC152e4FAA3dC714Fc53EA5A47a/token-transfers](https://explorer.testnet.mantle.xyz/token/0xD3d65B24F2813eC152e4FAA3dC714Fc53EA5A47a/token-transfers)
+
 ## Deploy Smart Contract Using Remix:
 
 - Create a file on Remix, accessing [https://remix.ethereum.org/](https://remix.ethereum.org/)
