@@ -21,37 +21,15 @@ full [BlockAIDS Summary](/README.md).
 - Backend: Node.js, .NET, PostgreSQL;
 - Blockchain: Solidity, Hardhat, Remix, Web3.js etc.
 
-## DEMO
+## Deploy:
 
-![explorer-docs.png](./docs/images/explorer-docs.png)
-
-## Smart Contract
-
-[https://sepolia.scrollscan.dev/token/0x53ACC15CFf0af3eF4962714238CB9b8c9e842631](https://sepolia.scrollscan.dev/token/0x53ACC15CFf0af3eF4962714238CB9b8c9e842631)
-
-## Deploy Smart Contract Using Remix:
-
-- Create a file on Remix, accessing [https://remix.ethereum.org/](https://remix.ethereum.org/)
-- Upload pre-built [smart contract](ScrollToken.sol) into the IDE
-- Update the smart contract, you can change `name`, `symbol`, `decimals`, `totalSupply`
-- Compile the smart contract
-- Connect Remix to the Scroll Sepolia Testnet via Metamask
-- Deploy the smart contract and get the transaction hash
-- Verify the smart contract on [Scroll Sepolia Testnet Explorer](https://sepolia.scrollscan.dev/) by transaction hash
+[Example](https://github.com/blockwebdevs/BlockAIDS-ETH/blob/main/contracts/Wormhole/token) of how to
+create and deploy smart contract
 
 ## Usage
 
-### Testing Usage (Remix IDE):
-
-After the smart contract is deployed, in the Remix sidebar('Deployed Contracts' list) you could load the contract from
-its address:
-
-![remix-interact.png](./docs/images/remix-interact.png)
-
-### JS Usage:
-
-[Here](https://github.com/blockwebdevs/BlockAIDS-ETH/blob/main/frontend/src/helpers/metamask.ts#L76C14-L76C28) are
-examples of how to interact with the smart contract functions using Web3.js.
+[Example](https://github.com/blockwebdevs/BlockAIDS-ETH/blob/main/contracts/Wormhole/demo/transfer.js) of how to
+transfer tokens from Ethereum to Polygon
 
 ### Team members
 
