@@ -25,6 +25,10 @@ full [BlockAIDS Summary](../README.md).
 
 ![explorer-docs.png](./docs/images/explorer-docs.png)
 
+## Smart Contract
+
+[https://sepolia.scrollscan.dev/token/0x53ACC15CFf0af3eF4962714238CB9b8c9e842631](https://sepolia.scrollscan.dev/token/0x53ACC15CFf0af3eF4962714238CB9b8c9e842631)
+
 ## Deploy Smart Contract Using Remix:
 
 - Create a file on Remix, accessing [https://remix.ethereum.org/](https://remix.ethereum.org/)
