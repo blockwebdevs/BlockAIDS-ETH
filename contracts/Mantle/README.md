@@ -11,7 +11,7 @@ range of rewards and benefits, the system aims to ensure that individuals engage
 to their overall health, well-being, and the safety of others.
 
 For more details on achievements thusfar and PledgePositive specifics, please see the
-full [BlockAIDS Summary](../README.md).
+full [BlockAIDS Summary](/README.md).
 
 ![art_03-fe308d](https://github.com/w3f/Grants-Program/assets/59833178/3c522f8c-b38b-4126-82dd-6537c674fae3)
 

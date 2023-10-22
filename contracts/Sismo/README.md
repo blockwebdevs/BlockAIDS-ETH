@@ -2,4 +2,4 @@ BlockAIDS is a decentralized ecosystem that harnesses the power of blockchain an
 
 We are currently building PledgePositive, an adherence tracker and encouragement platform - a subnet designed to promote and incentivize healthy behaviors, medication adherence practices, and preventive measures. By utilizing a comprehensive range of rewards and benefits, the system aims to ensure that individuals engage in regular activities that contribute to their overall health, well-being, and the safety of others.
 
-For more details on achievements thusfar and PledgePositive specifics, please see the full [BlockAIDS Summary](../README.md).
+For more details on achievements thusfar and PledgePositive specifics, please see the full [BlockAIDS Summary](/README.md).
